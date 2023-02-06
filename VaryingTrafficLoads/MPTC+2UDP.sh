@@ -217,14 +217,10 @@ ip -n h2 mptcp endpoint add 10.0.2.1 dev eh2b subflow fullmesh
 # ip netns exec ? tshark -i ? -w captures/_.pcap ---background
 
 # Create servers on 's1'
-ip netns exec s1 python3.11 -m http.server --protocol HTTP/1.1 ---background
-ip netns exec s1 iperf -u -s -p 5003 -S 0xC0 -l 200 ---background
-ip netns exec s1 iperf -s -p 5063 ---background
+ip netns exec s1 iperf -u -s -p 5001 ---background
 
 # Create servers on 's3'
-ip netns exec s3 python3.11 -m http.server --protocol HTTP/1.1---background
-ip netns exec s3 iperf -u -s -p 5002 -S 0xC0 -l 200 ---background
-ip netns exec s3 iperf -s -p 5062 ---background
+ip netns exec s3 iperf -u -s -p 5002 ---background
 
 # Create servers on 's2'
 mptcpize run ip netns exec s2 python3.11 -m http.server --protocol HTTP/1.1 ---background
@@ -233,30 +229,10 @@ mptcpize run ip netns exec s2 python3.11 -m http.server --protocol HTTP/1.1 ---b
 cd /home/abhinaba/Major/MPTCP/client
 
 # Run client tasks on 'h1'
-ip netns exec h1 httperf --hog --server 12.0.0.2 --port 8000 --num-conns 10 --rate 2 --http-version=1.1 ---set-time 20 
-ip netns exec h1 iperf -u -c 12.0.0.2 -p 5003 -S 0xC0 -l 200 -b 200k -t 0 ---background
-ip netns exec h1 iperf -u -c 12.0.0.2 -p 5003 -S 0xC0 -l 200 -b 200k -t 0 ---background
-ip netns exec h1 iperf -u -c 12.0.0.2 -p 5003 -S 0xC0 -l 200 -b 200k -t 0 ---background
-ip netns exec h1 iperf -u -c 12.0.0.2 -p 5003 -S 0xC0 -l 200 -b 200k -t 0 ---background
-ip netns exec h1 iperf -u -c 12.0.0.2 -p 5003 -S 0xC0 -l 200 -b 200k -t 0 ---background
-ip netns exec h1 iperf -c 12.0.0.2 -p 5063 -b 3M -t 0 ---background
-ip netns exec h1 iperf -c 12.0.0.2 -p 5063 -b 3M -t 0 ---background
-ip netns exec h1 iperf -c 12.0.0.2 -p 5063 -b 3M -t 0 ---background
-ip netns exec h1 iperf -c 12.0.0.2 -p 5063 -b 3M -t 0 ---background
-ip netns exec h1 iperf -c 12.0.0.2 -p 5063 -b 3M -t 0 ---background
+ip netns exec h1 iperf -u -c 12.0.0.2 -p 5001 -b 10M -t 0 ---background
 
 # Run client tasks on 'h3'
-ip netns exec h3 httperf --hog --server 12.0.3.2 --port 8000 --num-conns 20 --rate 2 --http-version=1.1 ---set-time 20 
-ip netns exec h3 iperf -u -c 12.0.3.2 -p 5002 -S 0xC0 -l 200 -b 200k -t 0 ---background
-ip netns exec h3 iperf -u -c 12.0.3.2 -p 5002 -S 0xC0 -l 200 -b 200k -t 0 ---background
-ip netns exec h3 iperf -u -c 12.0.3.2 -p 5002 -S 0xC0 -l 200 -b 200k -t 0 ---background
-ip netns exec h3 iperf -u -c 12.0.3.2 -p 5002 -S 0xC0 -l 200 -b 200k -t 0 ---background
-ip netns exec h3 iperf -u -c 12.0.3.2 -p 5002 -S 0xC0 -l 200 -b 200k -t 0 ---background
-ip netns exec h3 iperf -c 12.0.3.2 -p 5062 -b 3M -t 0 ---background
-ip netns exec h3 iperf -c 12.0.3.2 -p 5062 -b 3M -t 0 ---background
-ip netns exec h3 iperf -c 12.0.3.2 -p 5062 -b 3M -t 0 ---background
-ip netns exec h3 iperf -c 12.0.3.2 -p 5062 -b 3M -t 0 ---background
-ip netns exec h3 iperf -c 12.0.3.2 -p 5062 -b 3M -t 0 ---background
+ip netns exec h3 iperf -u -c 12.0.3.2 -p 5002 -b 9M -t 0 ---background
 
 # Stream DASH using MPTCP from 'h2'
-mptcpize run ip netns exec h2 gpac -i http://12.0.1.2:8000/dash/BigBuckBunny/2sec/simple_manifest.mpd:gpac:algo=gbuf:start_with=min_bw aout vout:buffer=1000:mbuffer=10000 -logs=all@info -log-file=gpac_log.log ---set-time-wait 5
+mptcpize run ip netns exec h2 gpac -i http://12.0.1.2:8000/dash/BigBuckBunny/2sec/simple_manifest.mpd:gpac:algo=gbuf:start_with=min_bw aout vout:buffer=100:mbuffer=1000 -logs=all@info -log-file=gpac_log.log ---set-time-wait 5
