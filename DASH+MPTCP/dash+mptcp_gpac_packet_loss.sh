@@ -106,7 +106,7 @@ mptcpize run ip netns exec h2 python3.11 -m http.server --protocol HTTP/1.1 ---b
 
 # Stream DASH from client
 cd ../client
-mptcpize run ip netns exec h1 gpac -gui http://10.0.0.2:8000/dash/encode/manifest.mpd -logs=all@info -log-file=gpac_log.txt ---set-time-wait 3
+mptcpize run ip netns exec h2 gpac -i http://10.0.0.2:8000/dash/BigBuckBunny/2sec/simple_manifest.mpd:gpac:algo=gbuf:start_with=min_bw aout vout:buffer=1000:mbuffer=10000 -logs=all@info -log-file=gpac_log.log ---set-time-wait 3
 
 # Capture network statistics after
 cd ../server
