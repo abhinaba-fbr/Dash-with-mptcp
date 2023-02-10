@@ -243,11 +243,11 @@ ip netns exec h1 httperf --hog --server 12.0.0.2 --port 8000 --wsess=500,15,2 --
 cd /home/abhinaba/Utilitis/sipp-3.6.0/
 ip netns exec h1 ./sipp 12.0.0.2:5001 -sf sender.xml -r 5 > /dev/null ---background
 # FTP Traffic
-ip netns exec h1 iperf -c 12.0.0.2 -p 5061 -b 2M -t 0 ---background
-ip netns exec h1 iperf -c 12.0.0.2 -p 5061 -b 2M -t 0 ---background
-ip netns exec h1 iperf -c 12.0.0.2 -p 5061 -b 2M -t 0 ---background
-ip netns exec h1 iperf -c 12.0.0.2 -p 5061 -b 2M -t 0 ---background
-ip netns exec h1 iperf -c 12.0.0.2 -p 5061 -b 2M -t 0 ---background
+ip netns exec h1 iperf -c 12.0.0.2 -p 5061 -b 1.5M -t 0 ---background
+ip netns exec h1 iperf -c 12.0.0.2 -p 5061 -b 1.5M -t 0 ---background
+ip netns exec h1 iperf -c 12.0.0.2 -p 5061 -b 1.5M -t 0 ---background
+ip netns exec h1 iperf -c 12.0.0.2 -p 5061 -b 1.5M -t 0 ---background
+ip netns exec h1 iperf -c 12.0.0.2 -p 5061 -b 1.5M -t 0 ---background
 
 # Run client tasks on 'h3'
 # WEB Traffic
@@ -255,11 +255,11 @@ ip netns exec h3 httperf --hog --server 12.0.3.2 --port 8000 --wsess=500,15,2 --
 # VoIP Traffic
 ip netns exec h3 ./sipp 12.0.3.2:5002 -sf sender.xml -r 5 > /dev/null ---background
 # FTP Traffic
-ip netns exec h3 iperf -c 12.0.3.2 -p 5062 -b 2M -t 0 ---background
-ip netns exec h3 iperf -c 12.0.3.2 -p 5062 -b 2M -t 0 ---background
-ip netns exec h3 iperf -c 12.0.3.2 -p 5062 -b 2M -t 0 ---background
-ip netns exec h3 iperf -c 12.0.3.2 -p 5062 -b 2M -t 0 ---background
-ip netns exec h3 iperf -c 12.0.3.2 -p 5062 -b 2M -t 0 ---background
+ip netns exec h3 iperf -c 12.0.3.2 -p 5062 -b 1.5M -t 0 ---background
+ip netns exec h3 iperf -c 12.0.3.2 -p 5062 -b 1.5M -t 0 ---background
+ip netns exec h3 iperf -c 12.0.3.2 -p 5062 -b 1.5M -t 0 ---background
+ip netns exec h3 iperf -c 12.0.3.2 -p 5062 -b 1.5M -t 0 ---background
+ip netns exec h3 iperf -c 12.0.3.2 -p 5062 -b 1.5M -t 0 ---background
 
 # Stream DASH using MPTCP from 'h2'
 cd /home/abhinaba/Major/MPTCP/client
