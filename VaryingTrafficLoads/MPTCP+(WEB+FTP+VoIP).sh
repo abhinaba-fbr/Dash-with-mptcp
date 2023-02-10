@@ -218,15 +218,19 @@ ip -n h2 mptcp endpoint add 10.0.2.1 dev eh2b subflow fullmesh
 
 # Create servers on 's1'
 ip netns exec s1 python3.11 -m http.server --protocol HTTP/1.1 ---background
-ip netns exec s1 iperf -u -s -p 5001 -S 0xC0 -l 200 ---background
 ip netns exec s1 iperf -s -p 5061 ---background
+cd /home/abhinaba/Utilitis/sipp-3.6.0/
+ip netns exec s1 ./sipp -sf receiver.xml -p 5001 > /dev/null ---background
 
 # Create servers on 's3'
+cd /home/Major/MPTCP/server
 ip netns exec s3 python3.11 -m http.server --protocol HTTP/1.1---background
-ip netns exec s3 iperf -u -s -p 5002 -S 0xC0 -l 200 ---background
 ip netns exec s3 iperf -s -p 5062 ---background
+cd /home/abhinaba/Utilitis/sipp-3.6.0/
+ip netns exec s3 ./sipp -sf receiver.xml -p 5002 > /dev/null ---background
 
 # Create servers on 's2'
+cd /home/abhinaba/Major/MPTCP/server/
 mptcpize run ip netns exec s2 python3.11 -m http.server --protocol HTTP/1.1 ---background
 
 # Change Directory to client
@@ -234,35 +238,29 @@ cd /home/abhinaba/Major/MPTCP/client
 
 # Run client tasks on 'h1'
 # WEB Traffic
-ip netns exec h1 httperf --hog --server 12.0.0.2 --port 8000 --num-conns 10 --rate 2 --http-version=1.1 ---set-time 20 
+ip netns exec h1 httperf --hog --server 12.0.0.2 --port 8000 --wsess=500,15,2 --rate 1 --http-version=1.1 ---set-time 2 
 # VoIP Traffic
-ip netns exec h1 iperf -u -c 12.0.0.2 -p 5001 -S 0xC0 -l 200 -b 200k -t 0 ---background
-ip netns exec h1 iperf -u -c 12.0.0.2 -p 5001 -S 0xC0 -l 200 -b 200k -t 0 ---background
-ip netns exec h1 iperf -u -c 12.0.0.2 -p 5001 -S 0xC0 -l 200 -b 200k -t 0 ---background
-ip netns exec h1 iperf -u -c 12.0.0.2 -p 5001 -S 0xC0 -l 200 -b 200k -t 0 ---background
-ip netns exec h1 iperf -u -c 12.0.0.2 -p 5001 -S 0xC0 -l 200 -b 200k -t 0 ---background
+cd /home/abhinaba/Utilitis/sipp-3.6.0/
+ip netns exec h1 ./sipp 12.0.0.2:5001 -sf sender.xml -r 5 > /dev/null ---background
 # FTP Traffic
-ip netns exec h1 iperf -c 12.0.0.2 -p 5061 -b 3M -t 0 ---background
-ip netns exec h1 iperf -c 12.0.0.2 -p 5061 -b 3M -t 0 ---background
-ip netns exec h1 iperf -c 12.0.0.2 -p 5061 -b 3M -t 0 ---background
-ip netns exec h1 iperf -c 12.0.0.2 -p 5061 -b 3M -t 0 ---background
-ip netns exec h1 iperf -c 12.0.0.2 -p 5061 -b 3M -t 0 ---background
+ip netns exec h1 iperf -c 12.0.0.2 -p 5061 -b 2M -t 0 ---background
+ip netns exec h1 iperf -c 12.0.0.2 -p 5061 -b 2M -t 0 ---background
+ip netns exec h1 iperf -c 12.0.0.2 -p 5061 -b 2M -t 0 ---background
+ip netns exec h1 iperf -c 12.0.0.2 -p 5061 -b 2M -t 0 ---background
+ip netns exec h1 iperf -c 12.0.0.2 -p 5061 -b 2M -t 0 ---background
 
 # Run client tasks on 'h3'
 # WEB Traffic
-ip netns exec h3 httperf --hog --server 12.0.3.2 --port 8000 --num-conns 20 --rate 2 --http-version=1.1 ---set-time 20 
+ip netns exec h3 httperf --hog --server 12.0.3.2 --port 8000 --wsess=500,15,2 --rate 1 --http-version=1.1 ---set-time 2 
 # VoIP Traffic
-ip netns exec h3 iperf -u -c 12.0.3.2 -p 5002 -S 0xC0 -l 200 -b 200k -t 0 ---background
-ip netns exec h3 iperf -u -c 12.0.3.2 -p 5002 -S 0xC0 -l 200 -b 200k -t 0 ---background
-ip netns exec h3 iperf -u -c 12.0.3.2 -p 5002 -S 0xC0 -l 200 -b 200k -t 0 ---background
-ip netns exec h3 iperf -u -c 12.0.3.2 -p 5002 -S 0xC0 -l 200 -b 200k -t 0 ---background
-ip netns exec h3 iperf -u -c 12.0.3.2 -p 5002 -S 0xC0 -l 200 -b 200k -t 0 ---background
+ip netns exec h3 ./sipp 12.0.3.2:5002 -sf sender.xml -r 5 > /dev/null ---background
 # FTP Traffic
-ip netns exec h3 iperf -c 12.0.3.2 -p 5062 -b 3M -t 0 ---background
-ip netns exec h3 iperf -c 12.0.3.2 -p 5062 -b 3M -t 0 ---background
-ip netns exec h3 iperf -c 12.0.3.2 -p 5062 -b 3M -t 0 ---background
-ip netns exec h3 iperf -c 12.0.3.2 -p 5062 -b 3M -t 0 ---background
-ip netns exec h3 iperf -c 12.0.3.2 -p 5062 -b 3M -t 0 ---background
+ip netns exec h3 iperf -c 12.0.3.2 -p 5062 -b 2M -t 0 ---background
+ip netns exec h3 iperf -c 12.0.3.2 -p 5062 -b 2M -t 0 ---background
+ip netns exec h3 iperf -c 12.0.3.2 -p 5062 -b 2M -t 0 ---background
+ip netns exec h3 iperf -c 12.0.3.2 -p 5062 -b 2M -t 0 ---background
+ip netns exec h3 iperf -c 12.0.3.2 -p 5062 -b 2M -t 0 ---background
 
 # Stream DASH using MPTCP from 'h2'
-mptcpize run ip netns exec h2 gpac -i http://12.0.1.2:8000/dash/BigBuckBunny/2sec/simple_manifest.mpd:gpac:algo=gbuf:start_with=min_bw aout vout:buffer=1000:mbuffer=10000 -logs=all@info -log-file=gpac_log.log ---set-time-wait 5
+cd /home/abhinaba/Major/MPTCP/client
+mptcpize run ip netns exec h2 gpac -i http://12.0.1.2:8000/dash/BigBuckBunny/1sec/simple_manifest.mpd:gpac:algo=gbuf:start_with=max_bw aout vout:buffer=1000:mbuffer=10000 -logs=all@info -log-file=gpac_log.log ---set-time-wait 5

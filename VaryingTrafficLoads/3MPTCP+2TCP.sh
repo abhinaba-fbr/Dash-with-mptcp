@@ -407,12 +407,12 @@ ip -n h4 mptcp endpoint add 16.0.0.1 dev eh4b subflow fullmesh
 ip -n h4 mptcp endpoint add 15.0.0.1 dev eh4a subflow fullmesh
 
 # Start the http server
-cd /home/dayma_khan/Server
+cd /home/abhinaba/Major/MPTCP/server
 # mptcpize run ip netns exec s1 iperf -s ---background
 mptcpize run ip netns exec s1 python3.11 -m http.server --protocol HTTP/1.1 ---background
 
 # Start video streaming 
-cd /home/dayma_khan/client
+cd /home/abhinaba/Major/MPTCP/client
 # mkdir captures
 # ip netns exec s1 tshark -i es1a -w captures/master.pcap ---background
 # ip netns exec s1 tshark -i es1b -w captures/subflow-1.pcap ---background
@@ -421,6 +421,6 @@ cd /home/dayma_khan/client
 # mptcpize run ip netns exec h2 iperf -c 10.0.3.2 ---background
 # mptcpize run ip netns exec h3 iperf -c 10.0.3.2 ---background
 # mptcpize run ip netns exec h4 iperf -c 10.0.3.2
-mptcpize run ip netns exec h2 gpac -i http://10.0.3.2:8000/dash/encode3/manifest.mpd:gpac:algo=grate:start_with=max_bw aout vout -logs=all@info -log-file=gpac_log.txt ---set-time 1
-mptcpize run ip netns exec h3 gpac -i http://10.0.3.2:8000/dash/encode3/manifest.mpd:gpac:algo=grate:start_with=max_bw aout vout -logs=all@info -log-file=gpac_log.txt ---set-time 1
-mptcpize run ip netns exec h4 gpac -i http://10.0.3.2:8000/dash/encode3/manifest.mpd:gpac:algo=grate:start_with=max_bw aout vout -logs=all@info -log-file=gpac_log.txt 
+# mptcpize run ip netns exec h2 gpac -i http://10.0.3.2:8000/dash/BigBuckBunny/2sec/simple_manifest.mpd:gpac:algo=grate:start_with=max_bw aout vout:buffer=1000:mbuffer=10000 -logs=all@info -log-file=gpac_log1.log ---set-time 1
+# mptcpize run ip netns exec h3 gpac -i http://10.0.3.2:8000/dash/BigBuckBunny/2sec/simple_manifest.mpd:gpac:algo=grate:start_with=max_bw aout vout:buffer=1000:mbuffer=10000 -logs=all@info -log-file=gpac_log2.log ---set-time 1
+mptcpize run ip netns exec h4 gpac -i http://10.0.3.2:8000/dash/BigBuckBunny/2sec/simple_manifest.mpd:gpac:algo=grate:start_with=max_bw aout vout:buffer=1000:mbuffer=10000 -logs=all@info -log-file=gpac_log3.log 
